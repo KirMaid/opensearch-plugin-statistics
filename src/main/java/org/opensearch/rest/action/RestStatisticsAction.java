@@ -18,8 +18,8 @@ public class RestStatisticsAction extends BaseRestHandler {
 
     private final StatisticsService statisticsService;
 
-    public RestStatisticsAction(Gson gson) {
-        this.statisticsService = new StatisticsService(gson);
+    public RestStatisticsAction(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
     }
 
     @Override
@@ -43,7 +43,6 @@ public class RestStatisticsAction extends BaseRestHandler {
                 channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, "Missing 'filePath' parameter"));
                 return;
             }
-
             try {
                 StatisticsResponse response = statisticsService.processFile(filePath);
                 String jsonResponse = new Gson().toJson(response);

@@ -11,6 +11,8 @@ import org.opensearch.test.OpenSearchIntegTestCase;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -73,8 +75,9 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
     }
 
     private String createTempFile(String content) throws IOException {
-        java.nio.file.Path tempFile = java.nio.file.Files.createTempFile("testdata", ".json");
-        java.nio.file.Files.write(tempFile, content.getBytes(StandardCharsets.UTF_8));
+        Path tempDir = createTempDir();
+        Path tempFile = Files.createTempFile(tempDir, "testdata", ".json");
+        Files.write(tempFile, content.getBytes(StandardCharsets.UTF_8));
         return tempFile.toString();
     }
 }

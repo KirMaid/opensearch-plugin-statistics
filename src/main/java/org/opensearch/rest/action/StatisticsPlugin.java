@@ -1,12 +1,12 @@
 package org.opensearch.rest.action;
 
-import com.google.gson.Gson;
 import org.opensearch.cluster.metadata.IndexNameExpressionResolver;
 import org.opensearch.cluster.node.DiscoveryNodes;
 import org.opensearch.common.settings.ClusterSettings;
 import org.opensearch.common.settings.IndexScopedSettings;
 import org.opensearch.common.settings.Settings;
 import org.opensearch.common.settings.SettingsFilter;
+import org.opensearch.env.Environment;
 import org.opensearch.plugins.ActionPlugin;
 import org.opensearch.plugins.Plugin;
 import org.opensearch.rest.RestController;
@@ -28,6 +28,6 @@ public class StatisticsPlugin extends Plugin implements ActionPlugin {
             SettingsFilter settingsFilter,
             IndexNameExpressionResolver indexNameExpressionResolver,
             Supplier<DiscoveryNodes> nodesInCluster) {
-        return singletonList(new RestStatisticsAction(new Gson()));
+        return singletonList(new RestStatisticsAction(new StatisticsService(new Environment(settings, null))));
     }
 }

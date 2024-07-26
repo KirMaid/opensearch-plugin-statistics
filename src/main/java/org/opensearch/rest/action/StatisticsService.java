@@ -2,24 +2,30 @@ package org.opensearch.rest.action;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.opensearch.env.Environment;
 import org.opensearch.rest.model.StatisticsResponse;
 import org.opensearch.rest.model.Ups;
 
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsService {
-    private final Gson gson;
+    private final Environment environment;
 
-    public StatisticsService(Gson gson) {
-        this.gson = gson;
+    public StatisticsService(Environment environment) {
+        this.environment = environment;
     }
 
     public StatisticsResponse processFile(String filePath) throws IOException {
-        try (FileReader reader = new FileReader(filePath)) {
+        Path resolvedPath = environment.configDir().resolve(filePath);
+        Gson gson = new Gson();
+        try (BufferedReader reader = Files.newBufferedReader(resolvedPath, StandardCharsets.UTF_8)) {
             Type listType = new TypeToken<ArrayList<Ups>>() {}.getType();
             List<Ups> statuses = gson.fromJson(reader, listType);
 
