@@ -36,6 +36,6 @@ public class StatisticsPluginIT extends OpenSearchIntegTestCase {
         String body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
         logger.info("response body: {}", body);
-        assertThat(body, containsString("statistics"));
+        assertThat(body, containsString("Statistics"));
     }
 }
