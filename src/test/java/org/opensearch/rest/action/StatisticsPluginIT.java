@@ -5,7 +5,7 @@
  * this file be licensed under the Apache-2.0 license or a
  * compatible open source license.
  */
-package org.opensearch.rest.model;
+package org.opensearch.rest.action;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
 import org.apache.hc.core5.http.ParseException;
@@ -13,7 +13,6 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.opensearch.client.Request;
 import org.opensearch.client.Response;
 import org.opensearch.plugins.Plugin;
-import org.opensearch.rest.action.StatisticsPlugin;
 import org.opensearch.test.OpenSearchIntegTestCase;
 
 import java.io.IOException;
