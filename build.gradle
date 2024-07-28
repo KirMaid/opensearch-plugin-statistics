@@ -10,7 +10,7 @@ apply plugin: 'opensearch.pluginzip'
 def pluginName = 'Statistics'
 def pluginDescription = 'Plugin for calculate statistics'
 def projectPath = 'org.opensearch'
-def pathToPlugin = 'rest/action'
+def pathToPlugin = 'rest.action.'
 def pluginClassName = 'StatisticsPlugin'
 group = "Statistics"
 
