@@ -11,8 +11,6 @@ import org.opensearch.test.OpenSearchIntegTestCase;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -30,11 +28,12 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
     }
 
     public void testStatisticsEndpoint() throws IOException, ParseException {
+        String index = "test-index";
         String testDataJson = "[{\"host\": \"host1\", \"upsAdvBatteryRunTimeRemaining\": 120, \"upsAdvOutputVoltage\": 230}, " +
                 "{\"host\": \"host2\", \"upsAdvBatteryRunTimeRemaining\": 150, \"upsAdvOutputVoltage\": 240}]";
-        String filePath = createTempFile(testDataJson);
+        indexTestData(index, testDataJson);
 
-        Request request = new Request("GET", "/_statistics?filePath=" + filePath);
+        Request request = new Request("GET", "/_plugins/statistics/" + index);
         Response response = getRestClient().performRequest(request);
 
         String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
@@ -50,8 +49,8 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
         assertThat(responseBody, containsString(expectedHosts.get(1)));
     }
 
-    public void testStatisticsEndpointMissingFilePath() throws IOException, ParseException {
-        Request request = new Request("GET", "/_statistics");
+    public void testStatisticsEndpointMissingIndex() throws IOException, ParseException {
+        Request request = new Request("GET", "/_plugins/statistics");
 
         Response response = getRestClient().performRequest(request);
         String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
@@ -59,25 +58,34 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
         logger.info("response body: {}", responseBody);
 
         assertThat(response.getStatusLine().getStatusCode(), equalTo(400)); // Bad Request
-        assertThat(responseBody, containsString("Missing 'filePath' parameter"));
+        assertThat(responseBody, containsString("Missing 'index' parameter"));
     }
 
-    public void testStatisticsEndpointInvalidFile() throws IOException, ParseException {
-        Request request = new Request("GET", "/_statistics?filePath=invalid_path");
+    public void testStatisticsEndpointInvalidIndex() throws IOException, ParseException {
+        Request request = new Request("GET", "/_plugins/statistics/invalid_index");
 
         Response response = getRestClient().performRequest(request);
         String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
         logger.info("response body: {}", responseBody);
 
-        assertThat(response.getStatusLine().getStatusCode(), equalTo(500)); // Internal Server Error
-        assertThat(responseBody, containsString("Error reading the JSON file"));
+        assertThat(response.getStatusLine().getStatusCode(), equalTo(404)); // Not Found
+        assertThat(responseBody, containsString("index_not_found_exception"));
     }
 
-    private String createTempFile(String content) throws IOException {
-        Path tempDir = createTempDir();
-        Path tempFile = Files.createTempFile(tempDir, "testdata", ".json");
-        Files.write(tempFile, content.getBytes(StandardCharsets.UTF_8));
-        return tempFile.toString();
+    private void indexTestData(String index, String testDataJson) throws IOException {
+        Request request = new Request("PUT", "/" + index);
+        getRestClient().performRequest(request);
+
+        Request bulkRequest = new Request("POST", "/" + index + "/_bulk");
+        bulkRequest.addParameter("refresh", "true");
+        StringBuilder bulkData = new StringBuilder();
+        String[] dataItems = testDataJson.split("}, \\{");
+        for (String dataItem : dataItems) {
+            bulkData.append("{\"index\": {}}\n");
+            bulkData.append(dataItem.replace("[", "").replace("]", "")).append("\n");
+        }
+        bulkRequest.setJsonEntity(bulkData.toString());
+        getRestClient().performRequest(bulkRequest);
     }
 }

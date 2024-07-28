@@ -4,10 +4,10 @@ import java.util.List;
 
 public class StatisticsResponse {
     private final double avgRunTime;
-    private final int maxOutputVoltage;
+    private final double maxOutputVoltage;
     private final List<String> hosts;
 
-    public StatisticsResponse(double avgRunTime, int maxOutputVoltage, List<String> hosts) {
+    public StatisticsResponse(double avgRunTime, double maxOutputVoltage, List<String> hosts) {
         this.avgRunTime = avgRunTime;
         this.maxOutputVoltage = maxOutputVoltage;
         this.hosts = hosts;
@@ -17,7 +17,7 @@ public class StatisticsResponse {
         return avgRunTime;
     }
 
-    public int getMaxOutputVoltage() {
+    public double getMaxOutputVoltage() {
         return maxOutputVoltage;
     }
 

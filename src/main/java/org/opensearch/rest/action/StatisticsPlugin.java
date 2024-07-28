@@ -6,7 +6,6 @@ import org.opensearch.common.settings.ClusterSettings;
 import org.opensearch.common.settings.IndexScopedSettings;
 import org.opensearch.common.settings.Settings;
 import org.opensearch.common.settings.SettingsFilter;
-import org.opensearch.env.Environment;
 import org.opensearch.plugins.ActionPlugin;
 import org.opensearch.plugins.Plugin;
 import org.opensearch.rest.RestController;
@@ -28,6 +27,6 @@ public class StatisticsPlugin extends Plugin implements ActionPlugin {
             SettingsFilter settingsFilter,
             IndexNameExpressionResolver indexNameExpressionResolver,
             Supplier<DiscoveryNodes> nodesInCluster) {
-        return singletonList(new RestStatisticsAction(new StatisticsService(new Environment(settings, null))));
+        return singletonList(new RestStatisticsAction(new StatisticsService()));
     }
 }
