@@ -1,15 +1,12 @@
 package org.opensearch.rest.action;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.opensearch.client.Request;
 import org.opensearch.client.Response;
 import org.opensearch.plugins.Plugin;
 import org.opensearch.test.OpenSearchIntegTestCase;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +23,7 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
         return Collections.singletonList(StatisticsPlugin.class);
     }
 
-    public void testStatisticsEndpoint() throws IOException, ParseException {
+    public void testStatisticsEndpoint() throws IOException {
         String index = "test-index";
         String testDataJson = "[{\"host\": \"host1\", \"upsAdvBatteryRunTimeRemaining\": 120, \"upsAdvOutputVoltage\": 230}, " +
                 "{\"host\": \"host2\", \"upsAdvBatteryRunTimeRemaining\": 150, \"upsAdvOutputVoltage\": 240}]";
@@ -35,7 +32,7 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
         Request request = new Request("GET", "/_plugins/statistics/" + index);
         Response response = getRestClient().performRequest(request);
 
-        String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+        String responseBody = response.getEntity().toString();
         logger.info("response body: {}", responseBody);
 
         double expectedAvgRunTime = 135.0;
@@ -48,11 +45,11 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
         assertThat(responseBody, containsString(expectedHosts.get(1)));
     }
 
-    public void testStatisticsEndpointMissingIndex() throws IOException, ParseException {
+    public void testStatisticsEndpointMissingIndex() throws IOException {
         Request request = new Request("GET", "/_plugins/statistics");
 
         Response response = getRestClient().performRequest(request);
-        String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+        String responseBody = response.getEntity().toString();
 
         logger.info("response body: {}", responseBody);
 
@@ -60,11 +57,11 @@ public class StatisticsTests extends OpenSearchIntegTestCase {
         assertThat(responseBody, containsString("Missing 'index' parameter"));
     }
 
-    public void testStatisticsEndpointInvalidIndex() throws IOException, ParseException {
+    public void testStatisticsEndpointInvalidIndex() throws IOException {
         Request request = new Request("GET", "/_plugins/statistics/invalid_index");
 
         Response response = getRestClient().performRequest(request);
-        String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+        String responseBody = response.getEntity().toString();
 
         logger.info("response body: {}", responseBody);
 

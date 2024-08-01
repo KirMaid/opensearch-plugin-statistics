@@ -8,15 +8,12 @@
 package org.opensearch.rest.action;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.opensearch.client.Request;
 import org.opensearch.client.Response;
 import org.opensearch.plugins.Plugin;
 import org.opensearch.test.OpenSearchIntegTestCase;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -31,9 +28,9 @@ public class StatisticsPluginIT extends OpenSearchIntegTestCase {
         return Collections.singletonList(StatisticsPlugin.class);
     }
 
-    public void testPluginInstalled() throws IOException, ParseException {
+    public void testPluginInstalled() throws IOException {
         Response response = getRestClient().performRequest(new Request("GET", "/_cat/plugins"));
-        String body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+        String body = response.getEntity().toString();
 
         logger.info("response body: {}", body);
         assertThat(body, containsString("Statistics"));
