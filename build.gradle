@@ -89,7 +89,6 @@ buildscript {
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'org.apache.httpcomponents:httpcore5:5.1'
 }
 
 repositories {
