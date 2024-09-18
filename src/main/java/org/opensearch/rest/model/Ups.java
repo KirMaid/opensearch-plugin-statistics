@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Ups {
     @SerializedName("ups_adv_output_load")
-    private int upsAdvOutputLoad;
+    private Integer  upsAdvOutputLoad;
 
     @SerializedName("ups_adv_battery_temperature")
-    private int upsAdvBatteryTemperature;
+    private Integer  upsAdvBatteryTemperature;
 
     @SerializedName("@timestamp")
     private String timestamp;
@@ -18,21 +18,21 @@ public class Ups {
     private int upsAdvBatteryRunTimeRemaining;
 
     @SerializedName("ups_adv_output_voltage")
-    private int upsAdvOutputVoltage;
-
-    public int getUpsAdvOutputLoad() {
+    private Double upsAdvOutputVoltage;
+    
+    public Integer getUpsAdvOutputLoad() {
         return upsAdvOutputLoad;
     }
 
-    public void setUpsAdvOutputLoad(int upsAdvOutputLoad) {
+    public void setUpsAdvOutputLoad(Integer upsAdvOutputLoad) {
         this.upsAdvOutputLoad = upsAdvOutputLoad;
     }
 
-    public int getUpsAdvBatteryTemperature() {
+    public Integer getUpsAdvBatteryTemperature() {
         return upsAdvBatteryTemperature;
     }
 
-    public void setUpsAdvBatteryTemperature(int upsAdvBatteryTemperature) {
+    public void setUpsAdvBatteryTemperature(Integer upsAdvBatteryTemperature) {
         this.upsAdvBatteryTemperature = upsAdvBatteryTemperature;
     }
 
@@ -52,19 +52,19 @@ public class Ups {
         this.host = host;
     }
 
-    public int getUpsAdvBatteryRunTimeRemaining() {
+    public Integer getUpsBatteryRunTimeRemaining() {
         return upsAdvBatteryRunTimeRemaining;
     }
 
-    public void setUpsAdvBatteryRunTimeRemaining(int upsAdvBatteryRunTimeRemaining) {
+    public void setUpsAdvBatteryRunTimeRemaining(Integer upsAdvBatteryRunTimeRemaining) {
         this.upsAdvBatteryRunTimeRemaining = upsAdvBatteryRunTimeRemaining;
     }
 
-    public int getUpsAdvOutputVoltage() {
+    public Double getUpsAdvOutputVoltage() {
         return upsAdvOutputVoltage;
     }
 
-    public void setUpsAdvOutputVoltage(int upsAdvOutputVoltage) {
+    public void setUpsAdvOutputVoltage(Double upsAdvOutputVoltage) {
         this.upsAdvOutputVoltage = upsAdvOutputVoltage;
     }
 }

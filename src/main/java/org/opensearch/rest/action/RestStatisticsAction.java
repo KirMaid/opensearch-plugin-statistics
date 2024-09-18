@@ -70,13 +70,13 @@ public class RestStatisticsAction extends BaseRestHandler {
                         Map<String, Object> sourceAsMap = hit.getSourceAsMap();
                         Ups ups = new Ups();
                         ups.setUpsAdvBatteryRunTimeRemaining(((Number) sourceAsMap.get("ups_adv_battery_run_time_remaining")).intValue());
-                        ups.setUpsAdvOutputVoltage(((Number) sourceAsMap.get("ups_adv_output_voltage")).intValue());
+                        ups.setUpsAdvOutputVoltage(((Number) sourceAsMap.get("ups_adv_output_voltage")).doubleValue());
                         ups.setHost((String) sourceAsMap.get("host"));
                         statuses.add(ups);
                     }
 
-                    double avgRunTime = statisticsService.calculateAverage(statuses, "upsAdvBatteryRunTimeRemaining");
-                    double maxOutputVoltage = statisticsService.findMaxValue(statuses, "upsAdvOutputVoltage");
+                    Double avgRunTime = statisticsService.calculateAverage(statuses, "upsAdvBatteryRunTimeRemaining");
+                    Double maxOutputVoltage = statisticsService.findMaxValue(statuses, "upsAdvOutputVoltage");
                     Set<String> hosts = statisticsService.extractUniqueValues(statuses, "host");
 
                     StatisticsResponse response = new StatisticsResponse(avgRunTime, maxOutputVoltage, new ArrayList<>(hosts));
