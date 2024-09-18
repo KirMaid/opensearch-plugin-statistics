@@ -50,9 +50,9 @@ loggerUsageCheck.enabled = false
 
 validateNebulaPom.enabled = false
 
-//tasks.named("dependencyLicenses") {
-//    enabled = false
-//}
+tasks.named("dependencyLicenses") {
+   enabled = false
+}
 //
 //tasks.named("licenseHeaders") {
 //    enabled = false
